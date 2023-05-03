@@ -3,14 +3,19 @@ import Header from "./Header.jsx";
 import { auth } from "../App.js";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import Collection from "./Collection.jsx";
 import "./Main.css";
 
 function Main() {
   return (
-    <div className="login">
-      <Header user={auth.currentUser} />
-      <p>Logged in!</p>
+    <div className="main-container">
+      <div className="header-container">
+        <Header user={auth.currentUser} />
+      </div>
       <div className="stats-container"></div>
+      <div className="collection-container">
+        <Collection />
+      </div>
       <div className="buttons-container">
         <Button variant="contained" onClick={addCollection}>
           Add Collection
