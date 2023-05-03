@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { getDatabase, ref, set } from "firebase/database";
-import { auth } from "../App.js";
+import { auth, db } from "../App.js";
+import { collection, doc, setDoc } from "firebase/firestore";
 function Database() {
   return (
     <div className="database-container">
@@ -24,11 +24,29 @@ function Database() {
   );
 }
 
-// const classes = new array(10);
+function writeUserData() {
+  const usersRef = collection(db, "users");
+  var user = auth.currentUser;
 
-function writeUserData() {}
+  const userData = {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+    photoUrl: user.photoURL,
+  };
+
+  const userDocRef = doc(usersRef, user.uid);
+  setDoc(userDocRef, userData)
+    .then((docRef) => {
+      console.log("Document written with ID: ", user.uid);
+    })
+    .catch((error) => {
+      console.error("Error adding document: ", error);
+    });
+}
 
 function handleClick() {
+  console.log(auth);
   writeUserData();
 }
 

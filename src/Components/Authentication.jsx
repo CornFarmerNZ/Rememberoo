@@ -21,7 +21,6 @@ function Authentication(props) {
     // if a user forgets to sign out.
     // ...
     // New sign-in will be persisted with session persistence.
-    console.log(auth);
     return signInWithPopup(auth, provider);
   };
   return (
