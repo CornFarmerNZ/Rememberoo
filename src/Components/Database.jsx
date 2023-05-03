@@ -1,7 +1,8 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import CircleLoading from "./CircleLoading.jsx";
 import { auth, db } from "../App.js";
 import { collection, doc, setDoc, getDoc } from "firebase/firestore";
+import Main from "./Main.jsx";
+import { useState, useEffect } from "react";
 
 async function writeUserData(usersRef, user) {
   const userData = {
@@ -30,40 +31,32 @@ async function getUserData(usersRef, user) {
   }
 }
 
-function handleClick() {
+export async function login() {
   const user = auth.currentUser;
   const usersRef = collection(db, "users");
   console.log(auth);
   //
-  getUserData(usersRef, user).then((exists) => {
+  await getUserData(usersRef, user).then((exists) => {
     if (exists) {
-      //user already exists in database
+      return true;
     } else {
       writeUserData(usersRef, user);
+      return true;
     }
   });
 }
 
 function Database() {
-  return (
-    <div className="database-container">
-      <TextField
-        id="outlined-basic note"
-        label="Description"
-        variant="outlined"
-      />
-      <br></br>
-      <br></br>
-      <Button
-        className="button-add-user"
-        id="button-add-user"
-        onClick={handleClick}
-        variant="contained"
-      >
-        Submit
-      </Button>
-    </div>
-  );
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    const doLogin = async () => {
+      await login();
+      setLoggedIn(true);
+    };
+    doLogin();
+  }, []);
+  login();
+  return loggedIn ? <Main /> : <CircleLoading />;
 }
 
 export default Database;
